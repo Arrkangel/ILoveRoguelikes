@@ -1,6 +1,6 @@
 
 require("grid")
-
+require("gamestate")
 
 function love.load()
 	love.window.setTitle("ILoveRoguelikes")
@@ -15,9 +15,12 @@ function love.load()
 	love.graphics.setColor(128,57,21)
 
 	grid.init(50,50)
-	grid.clear()
+
 
 	
+end
+function love.update()
+
 end
 
 
