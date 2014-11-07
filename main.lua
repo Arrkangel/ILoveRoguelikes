@@ -1,6 +1,7 @@
 
-require("grid")
+
 require("gamestate")
+require("mainstate")
 
 function love.load()
 	love.window.setTitle("ILoveRoguelikes")
@@ -12,19 +13,22 @@ function love.load()
 
 	love.graphics.setBackgroundColor(15,15,15)
 
-	love.graphics.setColor(128,57,21)
+	
 
-	grid.init(50,50)
+	
+
+	gamestate.pushState(mainstate)
 
 
 	
 end
-function love.update()
-
+function love.update(dt)
+	gamestate.update(dt)
 end
 
 
 function love.draw()
-	grid.draw()
+	--grid.draw()
+	gamestate.draw()
 
 end
