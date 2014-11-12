@@ -51,6 +51,8 @@ function grid.setGlyph(x,y,glyph)
 	grid[y*grid.width+x]=glyph
 end
 
+
+
 function grid.draw()
 	for x=0,grid.width-1 do
 		for y=0,grid.height-1 do

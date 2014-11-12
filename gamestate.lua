@@ -15,6 +15,12 @@ function gamestate.getCurrent()
 	return gamestate.statestack[table.maxn(gamestate.statestack)]
 	
 end
+
+function gamestate.sendInput(key,isrepeat)
+	gamestate.getCurrent().handleInput(key,isrepeat)
+end
+
+
 -- more complex state systems, allowing drawing over other states, or letting input get through to lower states,
 --will be added eventually. I promise. Soon (tm)
 function gamestate.update(dt)

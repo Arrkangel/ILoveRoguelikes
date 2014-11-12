@@ -13,15 +13,16 @@ function love.load()
 
 	love.graphics.setBackgroundColor(15,15,15)
 
-	
-
-	
-
 	gamestate.pushState(mainstate)
-
 
 	
 end
+
+function love.keypressed(key,isrepeat)
+	gamestate.sendInput(key,isrepeat)
+end
+
+
 function love.update(dt)
 	gamestate.update(dt)
 end
