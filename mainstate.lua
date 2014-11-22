@@ -1,54 +1,42 @@
 require("gamestate")
 require("grid")
-require("actor")
+require("actors")
 require("player")
 require("world")
+require("schedule")
 mainstate={}
 
 grid.init(50,50)
 world.init(50,50)
 
+local function testBlockTurn(self)
+	
+	self:move(0,1)
+	return true
+end
+local block=actors.newActor("Block",grid.createGlyph("B",0,255,0),10,1,testBlockTurn)
+schedule.addActor(block)
+
 
 function mainstate.handleInput(key,isprepeat)
 
-	if key=="kp8" or key=="k" then
-		player:move(0,-1)
-	end
-	if key=="kp2" or key=="j" then
-		player:move(0,1)
-	end
-	if key=="kp4" or key=="h" then
-		player:move(-1,0)
-	end
-	if key=="kp6" or key=="l" then
-		player:move(1,0)
-	end
-	if key=="kp7" or key=="y" then
-		player:move(-1,-1)
-	end
-	 if key=="kp9" or key=="u" then
-	 	player:move(1,-1)
-	 end
-	 if key=="kp3" or key=="n"  then
-	 	player:move(1,1)
-	 end
-	 if key=="kp1" or key=="b" then
-	 	player:move(-1,1)
-	 end
 
 
+	player.lastKey=key
 end
 
 
 function mainstate.update(dt)
 	--nifty game stuff goes here
 	grid.clear()
+	schedule.run()
 end
 function mainstate.draw()
 	--so much nifty stuff
 	world.toGrid()
 
 	grid.setGlyph(player.pos.x,player.pos.y,player.glyph)
+	block:draw()
 
 
 

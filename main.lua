@@ -1,4 +1,4 @@
-
+io.stdout:setvbuf("no")
 
 require("gamestate")
 require("mainstate")

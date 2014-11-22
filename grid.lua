@@ -8,23 +8,6 @@ function grid.init(width,height)
 	grid.width=width
 	grid.height=height
 
-	--[[grid test code
-	for x=0,grid.width-1 do
-		for y=0,grid.width-1 do
-			if x==0 or y==0 or x==width-1 or y==width-1 then
-				grid.setGlyph(x,y,grid.createGlyph("#",128,57,21))
-			else
-				grid.setGlyph(x,y,grid.createGlyph(".",75,75,75))
-			end
-		end
-	end
-	grid.setGlyph(3,3,grid.createGlyph("@",255,255,255))
-	grid.setGlyph(3,6,grid.createGlyph("g",17,100,22))
-	grid.setGlyph(7,3,grid.createGlyph("r",125,125,125))
-	grid.setGlyph(5,5,grid.createGlyph("D",126,21,24))
-	]]--
-
-
 
 end
 function grid.clear()
