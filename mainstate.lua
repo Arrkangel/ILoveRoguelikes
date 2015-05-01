@@ -4,24 +4,35 @@ require("actors")
 require("player")
 require("world")
 require("schedule")
+require("simpleitem")
+require("inventory")
+
 mainstate={}
 
-grid.init(50,50)
-world.init(50,50)
+
+function mainstate.init()
+	grid.init(51,51)
+	world.initFile("testlevel.txt")
+	--world.init(50,50)
+	world.saveWorldAs("testlevel3.txt")
+end
 
 local function testBlockTurn(self)
-	
-	self:move(0,1)
+	if actors.stateCheck(self) then
+		return true
+	end
+
+	self:move(-1,0,true)
 	return true
 end
-local block=actors.newActor("Block",grid.createGlyph("B",0,255,0),10,1,testBlockTurn)
-schedule.addActor(block)
+--local block=actors.newActor("Block",grid.createGlyph("B",1,255,1),10,1,testBlockTurn,stats.newSheet(10,10,10,10,10,10))
+--schedule.addActor(block)
+
+local sword=item.newItem("weapon",0,2)
+inventory.equip(sword)
 
 
 function mainstate.handleInput(key,isprepeat)
-
-
-
 	player.lastKey=key
 end
 
@@ -33,14 +44,36 @@ function mainstate.update(dt)
 end
 function mainstate.draw()
 	--so much nifty stuff
-	world.toGrid()
+	local pos=player.pos
+	local x1=pos.x-25
+	local y1=pos.y-25
 
-	grid.setGlyph(player.pos.x,player.pos.y,player.glyph)
-	block:draw()
+	if x1<0 then
+		x1=0
+	end
+	if y1<0 then
+		y1=0
+	end
+		
+	local x2=x1+51
+	local y2=y1+51
+
+	if x2>world.width then
+		x2=world.width
+	end
+	if y2>world.height then
+		y2=world.height
+	end
 
 
+	world.toGrid(x1,y1,x2,y2)
 
+	--grid.setGlyph(player.pos.x,player.pos.y,player.glyph)
+	--block:draw()
+	actors.draw(x1,y1,x2,y2)
+	player.draw(x1,y1,x2,y2)
 	grid.draw()
+	--grid.drawFrom(player.pos.x-25,player.pos.y-25)
 
 
 	--love.graphics.print("I'm a state! Awesome!",0,0)

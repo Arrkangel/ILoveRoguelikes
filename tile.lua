@@ -11,3 +11,4 @@ tile={}
 
 tile.wall=newTile(grid.createGlyph("#",128,57,21),true,false)
 tile.floor=newTile(grid.createGlyph(".",75,75,75),false,true)
+tile.nothing=newTile(grid.createGlyph(" ",0,0,0),true,false)

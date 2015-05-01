@@ -8,12 +8,20 @@ local function push(self,x,y)
 	self.y=self.y+y
 end
 
+local function equals(self,p)
+	return self.x==p.x and self.y==p.y
+end
+local function equalsNum(self,x,y)
+	return self.x==x and self.y==y
+end
 
 function point.newPoint(x,y)
 	local p={}
 	p.x=x
 	p.y=y
 	p.push=push
+	p.equals=equals
+	p.equalsNum=equalsNum
 	return p
 end
 function point.add(p1,p2)
