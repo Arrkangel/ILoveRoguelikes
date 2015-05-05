@@ -57,7 +57,8 @@ function player.move(x,y)
 	local testP=point.newPoint(x,y)
 	testP:push(player.pos.x,player.pos.y)
 	
-	if world.isPassable(testP.x,testP.y) then
+	--if world.isPassable(testP.x,testP.y) then
+	if true then
 		if #actors.actorAt(testP.x,testP.y)==0 then
 			player.pos:push(x,y)
 		else

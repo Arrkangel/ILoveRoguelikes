@@ -1,5 +1,6 @@
 require("grid")
 require("tile")
+require("dungen")
 world={}
 
 
@@ -58,11 +59,20 @@ function world.initFile(fileName)
 	end
 
 	file:close()
+end
 
-
-
+function world.initGen(width,height)
+	local data=dungen.bspGen(width,height)
+	world.height=height
+	world.width=width
+	for x=0,width-1 do
+		for y=0,height-1 do
+			world[y*width+x]=data[y*width+x]
+		end
+	end
 
 end
+
 
 function world.saveWorldAs(fileName)
 	local file,err =love.filesystem.newFile(fileName,"w")
