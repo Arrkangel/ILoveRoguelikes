@@ -14,7 +14,7 @@ function mainstate.init()
 	grid.init(51,51)
 	--world.initFile("testlevel.txt")
 	--world.init(50,50)
-	world.initGen(40,40)
+	world.initGen(100,100)
 	world.saveWorldAs("testlevel3.txt")
 end
 

@@ -62,7 +62,7 @@ function world.initFile(fileName)
 end
 
 function world.initGen(width,height)
-	local data=dungen.bspGen(width,height)
+	local data=dungen.digGen(width,height)
 	world.height=height
 	world.width=width
 	for x=0,width-1 do
