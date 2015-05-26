@@ -5,15 +5,20 @@ require("stats")
 require("point")
 require("inventory")
 require("gamestate")
+require("fov")
+require("aimstate")
 player={}
 
-player.glyph=grid.createGlyph("@",255,255,255)
-player.pos=point.newPoint(1,1)
-player.sheet=stats.newSheet(10,10,10,10,10,10)
+function player.init()
+	player.glyph=grid.createGlyph("@",255,255,255)
+	local px,py=world.randomTile(tile.floor)
+	player.pos=point.newPoint(px,py)
+	player.sheet=stats.newSheet(10,10,10,10,10,10)
 
 
-player.lastKey=nil
-schedule.addActor(player)
+	player.lastKey=nil
+	schedule.addActor(player)
+end
 
 function player.runTurn(self)
 	if player.sheet.hp<=0 then
@@ -50,15 +55,22 @@ function player.runTurn(self)
 	 if key=="kp1" or key=="b" then
 	 	player.move(-1,1)
 	 end
+	 if key=="f" then
+	 	aimstate.init()
+	 	gamestate.pushState(aimstate)
+	 end
+
 	 player.lastKey=nil
+	 fov.run(player.pos.x,player.pos.y,20)
+
 	 return true
 end
 function player.move(x,y)
 	local testP=point.newPoint(x,y)
 	testP:push(player.pos.x,player.pos.y)
 	
-	--if world.isPassable(testP.x,testP.y) then
-	if true then
+	if world.isPassable(testP.x,testP.y) then
+	
 		if #actors.actorAt(testP.x,testP.y)==0 then
 			player.pos:push(x,y)
 		else

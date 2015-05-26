@@ -30,10 +30,12 @@ function gamestate.update(dt)
 	end
 end
 function gamestate.draw()
+	grid.clear()
 	local cur=gamestate.getCurrent()
 	if cur then
 		cur.draw()
 	end
+	grid.draw()
 
 end
 

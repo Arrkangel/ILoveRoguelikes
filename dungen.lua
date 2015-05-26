@@ -1,13 +1,13 @@
 require("tile")
-require("util")
+
 dungen={}
 
 
 local function mapAt(map,x,y)
 	return map[y*map.width+x]
 end
-local function setTile(map,x,y,tile)
-	map[y*map.width+x]=tile
+local function setTile(map,x,y,t)
+	map[y*map.width+x]=t
 end
 
 local function testRectangle(x1,y1,x2,y2,map)

@@ -5,6 +5,10 @@ world={}
 
 
 
+function world.tileAt(x,y)
+	return world[y*world.width+x]
+end
+
 
 function world.init(width,height)
 	world.width=width
@@ -117,10 +121,31 @@ function world.toGrid(x1,y1,x2,y2)
 		for y=y1,y2-1 do
 			local tile=world[y*world.width+x]
 			if tile then
-				grid.setGlyph(x-x1,y-y1,world[y*world.width+x].glyph)
+				if viewmap[y*world.width+x] then
+					grid.setGlyph(x-x1,y-y1,world[y*world.width+x].glyph)
+				elseif remmap[y*world.width+x] then
+					grid.setGlyph(x-x1,y-y1,world[y*world.width+x].remglyph)
+				end
+				
 			end
 			
 			
 		end
+	end
+end
+
+function world.randomTile(t)
+	local attempt=0
+	local maxattempts=10000
+	local x=0
+	local y=0
+	while attempt<maxattempts do
+		x=math.random(0,world.width-1)
+		y=math.random(0,world.height-1)
+		if world.tileAt(x,y)==t then
+			return x,y
+
+		end
+		attempt=attempt+1
 	end
 end

@@ -72,11 +72,14 @@ end
 function actors.draw(x1,y1,x2,y2)
 	for x=x1,x2-1 do
 		for y=y1,y2-1 do
+			if viewmap[y*world.width+x] then
+				local ret=actors.actorAt(x,y)
+				for i,v in ipairs(ret) do
+					grid.setGlyph(x-x1,y-y1,v.glyph)
+				end
 			--print(x..","..y)
-			local ret=actors.actorAt(x,y)
-			for i,v in ipairs(ret) do
-				grid.setGlyph(x-x1,y-y1,v.glyph)
 			end
+			
 		end
 	end
 end

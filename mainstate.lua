@@ -6,6 +6,8 @@ require("world")
 require("schedule")
 require("simpleitem")
 require("inventory")
+require("fov")
+require("aimstate")
 
 mainstate={}
 
@@ -16,6 +18,9 @@ function mainstate.init()
 	--world.init(50,50)
 	world.initGen(100,100)
 	world.saveWorldAs("testlevel3.txt")
+	player.init()
+	fov.init()
+	aimstate.init()
 end
 
 local function testBlockTurn(self)
@@ -73,7 +78,7 @@ function mainstate.draw()
 	--block:draw()
 	actors.draw(x1,y1,x2,y2)
 	player.draw(x1,y1,x2,y2)
-	grid.draw()
+	
 	--grid.drawFrom(player.pos.x-25,player.pos.y-25)
 
 
