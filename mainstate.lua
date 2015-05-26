@@ -16,11 +16,7 @@ function mainstate.init()
 	grid.init(51,51)
 	--world.initFile("testlevel.txt")
 	--world.init(50,50)
-<<<<<<< Updated upstream
 	world.initGen(100,100)
-=======
-	world.initGen(50,50)
->>>>>>> Stashed changes
 	world.saveWorldAs("testlevel3.txt")
 	player.init()
 	fov.init()
