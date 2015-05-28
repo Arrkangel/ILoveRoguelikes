@@ -90,7 +90,7 @@ function dungen.digGen(width,height)
 		if math.random()<0.10 then
 			--print("corridor")
 			--corridor
-			local length=math.random(4,10)
+			local length=math.random(2,14)
 			local pushLoop=math.random()<0.75
 			local dir=dirs[math.random(1,#dirs)]
 			if dir=="up" then

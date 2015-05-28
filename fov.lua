@@ -12,23 +12,39 @@ mult={
     		}
 viewmap={}
 remmap={}
-function fov.init()
+
+function fov.newMaps()
+	local maps={}
+	maps.viewmap={}
+	maps.remmap={}
 	for x=0,world.width-1 do
 		for y=0,world.height-1 do
-			remmap[y*world.width+x]=false
+			maps.remmap[y*world.width+x]=false
 		end
 	end
+	return maps
 end
 
-local function light(x,y)
-	viewmap[y*world.width+x]=true
-	remmap[y*world.width+x]=true
+function fov.canSee(maps,x,y)
+	return maps.viewmap[y*world.width+x]
+end
+function fov.canRemember(maps,x,y)
+	return maps.remmap[y*world.width+x]
 end
 
-local function clearView()
+function fov.init()
+	
+end
+
+local function light(maps,x,y)
+	maps.viewmap[y*world.width+x]=true
+	maps.remmap[y*world.width+x]=true
+end
+
+local function clearView(maps)
 	for x=0,world.width-1 do
 		for y=0,world.height-1 do
-			viewmap[y*world.width+x]=false
+			maps.viewmap[y*world.width+x]=false
 		end
 	end
 end
@@ -38,7 +54,7 @@ local function radius(x,y)
 end
 
 
-local function castLight(cx,cy,row, start, fin,radius, xx, xy, yx, yy, depth)
+local function castLight(maps,cx,cy,row, start, fin,radius, xx, xy, yx, yy, depth)
 	if start < fin then
 		return
 	end
@@ -61,7 +77,7 @@ local function castLight(cx,cy,row, start, fin,radius, xx, xy, yx, yy, depth)
 				break
 			else
 				if (dx*dx+dy*dy)<radius_squared then
-					light(x,y)
+					light(maps,x,y)
 				end
 				if blocked then
 					if world.isOpaque(x,y) then
@@ -74,7 +90,7 @@ local function castLight(cx,cy,row, start, fin,radius, xx, xy, yx, yy, depth)
 				else
 					if world.isOpaque(x,y) and j<radius then
 						blocked=true
-						castLight(cx,cy,j+1,start,lslope,radius,xx,xy,yx,yy,depth+1)
+						castLight(maps,cx,cy,j+1,start,lslope,radius,xx,xy,yx,yy,depth+1)
 						newStartSlope=rslope
 					end
 				end
@@ -88,12 +104,12 @@ end
 
 
 
-function fov.run(x,y,dist)
-	clearView()
-	light(x,y)
+function fov.run(maps,x,y,dist)
+	clearView(maps)
+	light(maps,x,y)
 	
 	for oct=1,8 do
-		castLight(x,y,1,1.0,0.0,dist,mult[1][oct],mult[2][oct],mult[3][oct],mult[4][oct],0)
+		castLight(maps,x,y,1,1.0,0.0,dist,mult[1][oct],mult[2][oct],mult[3][oct],mult[4][oct],0)
 	end
 end
 
@@ -152,6 +168,76 @@ function fov.losline(line)
 		end
 	end
 	return true,nil
+end
+function fov.losray(x1,y1,x2,y2)
+	local line={}
+	if x1==x2 and y1==y2 then
+		return true,nil
+	end
+	local width=world.width
+	local height=world.height
+
+	local testX=x1
+	local testY=y1
+
+	local startX=x1
+	local startY=y1
+	local finX=x2
+	local finY=y2
+
+	local stepX=(finX-startX)/(math.abs(finX-startX))
+	local stepY=(finY-startY)/(math.abs(finY-startY))
+
+	local deltaY=finX-startX
+	local deltaX=finY-startY
+
+	local maxX=startX%1
+	local maxY=startY%1
+
+	local cPoint=point.newPoint(0,0)
+	while testX>=0 and testX<width and testY>=0 and testY<height and (testX ~=finX and testY ~= finY) do
+		line[#line+1]=point.newPoint(testX,testY)
+		
+		if maxX<maxY then
+			maxX=maxX+deltaX
+			testX=testX+stepX
+			if world.isOpaque(testX,testY) then
+				cPoint.x=testX
+				cPoint.y=testY
+				line[#line+1]=cPoint
+				--print("hit opaque")
+				return false,line
+			end
+		elseif maxY<maxX then
+			maxY=maxY+deltaY
+			testY=testY+stepY
+			if world.isOpaque(testX,testY) then
+				cPoint.x=testX
+				cPoint.y=testY
+				line[#line+1]=cPoint
+				--print("hit opaque")
+				return false,line
+			end
+		else
+			maxY=maxY+deltaY
+			testY=testY+stepY
+			maxX=maxX+deltaX
+			testX=testX+stepX
+			if world.isOpaque(testX,testY) then
+				cPoint.x=testX
+				cPoint.y=testY
+				line[#line+1]=cPoint
+				--print("hit opaque")
+				return false,line
+			end
+		end
+		if radius(testX-x1,testY-y1)>radius(x2-x1,y2-y1) then
+			print("OOR")
+			return false,line
+		end
+	end
+	--print("eow")
+	return true,line
 end
 
 

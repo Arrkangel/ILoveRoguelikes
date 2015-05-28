@@ -1,6 +1,7 @@
 require("grid")
 require("tile")
 require("dungen")
+require("monsters")
 world={}
 
 
@@ -9,6 +10,21 @@ function world.tileAt(x,y)
 	return world[y*world.width+x]
 end
 
+function world.randomTile(t)
+	local attempt=0
+	local maxattempts=10000
+	local x=0
+	local y=0
+	while attempt<maxattempts do
+		x=math.random(0,world.width-1)
+		y=math.random(0,world.height-1)
+		if world.tileAt(x,y)==t then
+			return x,y
+
+		end
+		attempt=attempt+1
+	end
+end
 
 function world.init(width,height)
 	world.width=width
@@ -22,6 +38,11 @@ function world.init(width,height)
 
 			world[y*width+x]=t
 		end
+	end
+	for i=1,1 do
+		local mx,my=world.randomTile(tile.floor)
+		monsters.newMonster("",mx,my)
+		print("monster at: "..mx..","..my)
 	end
 end
 
@@ -74,6 +95,32 @@ function world.initGen(width,height)
 			world[y*width+x]=data[y*width+x]
 		end
 	end
+	for i=1,20 do
+		local mx,my=world.randomTile(tile.floor)
+		monsters.newMonster("",mx,my)
+		--print("monster at: "..mx..","..my)
+	end
+	--[[local times={}
+	for i=1,5000 do
+		if i%100==0 then
+			print(i)
+		end
+		local sx,sy=world.randomTile(tile.floor)
+		local ex,ey=world.randomTile(tile.floor)
+		local start=love.timer.getTime()
+		pathfind.to(sx,sy,ex,ey)
+		local stop=love.timer.getTime()
+		times[#times+1]=stop-start
+	end
+	local sum=0
+	for i,v in ipairs(times) do
+		sum=sum+v
+	end
+	local average=sum/#times
+	print(#times.." random paths found in: "..sum.." seconds. Average time: "..1000*average.." mils")
+	]]--
+
+
 
 end
 
@@ -121,9 +168,9 @@ function world.toGrid(x1,y1,x2,y2)
 		for y=y1,y2-1 do
 			local tile=world[y*world.width+x]
 			if tile then
-				if viewmap[y*world.width+x] then
+				if player.maps.viewmap[y*world.width+x] then
 					grid.setGlyph(x-x1,y-y1,world[y*world.width+x].glyph)
-				elseif remmap[y*world.width+x] then
+				elseif player.maps.remmap[y*world.width+x] then
 					grid.setGlyph(x-x1,y-y1,world[y*world.width+x].remglyph)
 				end
 				
@@ -134,18 +181,3 @@ function world.toGrid(x1,y1,x2,y2)
 	end
 end
 
-function world.randomTile(t)
-	local attempt=0
-	local maxattempts=10000
-	local x=0
-	local y=0
-	while attempt<maxattempts do
-		x=math.random(0,world.width-1)
-		y=math.random(0,world.height-1)
-		if world.tileAt(x,y)==t then
-			return x,y
-
-		end
-		attempt=attempt+1
-	end
-end

@@ -13,11 +13,15 @@ function player.init()
 	player.glyph=grid.createGlyph("@",255,255,255)
 	local px,py=world.randomTile(tile.floor)
 	player.pos=point.newPoint(px,py)
-	player.sheet=stats.newSheet(10,10,10,10,10,10)
+	player.sheet=stats.newSheet(10,10,100,10,10,10)
 
 
 	player.lastKey=nil
 	schedule.addActor(player)
+
+	player.maps=fov.newMaps()
+	player.viewRange=15
+
 end
 
 function player.runTurn(self)
@@ -31,16 +35,16 @@ function player.runTurn(self)
 		return false
 	end
 	local key=player.lastKey
-	if key=="kp8" or key=="k" then
+	if key=="kp8" or key=="k" or key=="up" then
 		player.move(0,-1)
 	end
-	if key=="kp2" or key=="j" then
+	if key=="kp2" or key=="j" or key=="down" then
 		player.move(0,1)
 	end
-	if key=="kp4" or key=="h" then
+	if key=="kp4" or key=="h" or key=="left" then
 		player.move(-1,0)
 	end
-	if key=="kp6" or key=="l" then
+	if key=="kp6" or key=="l" or key=="right" then
 		player.move(1,0)
 	end
 	if key=="kp7" or key=="y" then
@@ -58,10 +62,15 @@ function player.runTurn(self)
 	 if key=="f" then
 	 	aimstate.init()
 	 	gamestate.pushState(aimstate)
+	 	player.lastKey=nil
+	 	return false
 	 end
 
 	 player.lastKey=nil
-	 fov.run(player.pos.x,player.pos.y,20)
+	 local startTime=love.timer.getTime()
+	 fov.run(player.maps,player.pos.x,player.pos.y,player.viewRange)
+	 local stopTime=love.timer.getTime()
+	 --print(stopTime-startTime)
 
 	 return true
 end

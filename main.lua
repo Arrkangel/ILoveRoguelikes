@@ -6,7 +6,7 @@ require("menustate")
 require("stats")
 function love.load()
 	math.randomseed(os.time())
-	love.window.setTitle("ILoveRoguelikes")
+	love.window.setTitle("ILöveRoguelikes")
 	love.filesystem.setIdentity("ILR")
 	
 	love.window.setMode(51*11,51*12)

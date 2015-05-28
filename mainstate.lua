@@ -8,6 +8,7 @@ require("simpleitem")
 require("inventory")
 require("fov")
 require("aimstate")
+require("pathfind")
 
 mainstate={}
 
@@ -21,6 +22,11 @@ function mainstate.init()
 	player.init()
 	fov.init()
 	aimstate.init()
+	--[[local sx,sy=world.randomTile(tile.floor)
+	pathtest=pathfind.to(sx,sy,player.pos.x,player.pos.y)
+	pathtestGlyph=grid.createGlyph("P",10,255,10)
+	]]--
+
 end
 
 local function testBlockTurn(self)
@@ -77,6 +83,14 @@ function mainstate.draw()
 	--grid.setGlyph(player.pos.x,player.pos.y,player.glyph)
 	--block:draw()
 	actors.draw(x1,y1,x2,y2)
+	
+
+	--pathfinding test
+	--[[for i,v in ipairs(pathtest) do
+		grid.setGlyph(v.x-x1,v.y-y1,pathtestGlyph)
+	end
+	]]--
+
 	player.draw(x1,y1,x2,y2)
 	
 	--grid.drawFrom(player.pos.x-25,player.pos.y-25)

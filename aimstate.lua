@@ -56,6 +56,10 @@ function aimstate.handleInput(key,isrepeat)
 	 	aimstate.target:push(-1,1)
 	 end
 	 if key=="return" then
+	 	--complte action
+	 	gamestate.popState()
+	 end
+	 if key=="escape" then
 	 	gamestate.popState()
 	 end
 
@@ -77,7 +81,7 @@ function aimstate.draw()
 
 	for i,v in ipairs(aimstate.line) do
 		
-		if viewmap[v.y*world.width+v.x] then
+		if player.maps.viewmap[v.y*world.width+v.x] then
 			grid.setGlyph(v.x-x1,v.y-y1,aimstate.emptyGlyph)
 		else
 			grid.setGlyph(v.x-x1,v.y-y1,aimstate.blockedGlyph)
